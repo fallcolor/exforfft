@@ -32,40 +32,63 @@ def freq2time(sf, arr):
     ang = np.empty(len(freq))
     for i in range(len(freq)):
         if amp[i] > 0:
-            ang[i] = math.atan(arr.imag / arr.real)
+            ang[i] = math.atan(arr[i].imag / arr[i].real)
     return freq, amp, ang 
 
+def funci(freq, amp, ang, pointnum):
+    x = np.linspace(-0.1, 0.1, pointnum)
+    y = np.empty(pointnum)
+    for i in range(pointnum):
+        y[i] = 0
+        for j in range(len(freq)):
+            if amp[j] > 0:
+                y[i] += 2 * amp[j] * np.cos(2 * np.pi * freq[j] * x[i] + ang[j])
+    return x, y
+
+def plotdata(sp, disnum):
+    x, y = sample(sp)
+    yfft = np.fft.fft(y) / len(y)
+    freq, amp, ang = freq2time(sp, yfft)
+    xo, yo = funci(freq, amp, ang, disnum)
+    return freq, amp, xo, yo
 
 plt.figure(1)
-ax1 = plt.subplot(511)
-ax2 = plt.subplot(512)
-ax3 = plt.subplot(513)
-ax4 = plt.subplot(514)
-ax5 = plt.subplot(515)
+ax0 = plt.subplot(421)
+ax1 = plt.subplot(422)
+ax2 = plt.subplot(423)
+ax3 = plt.subplot(424)
+ax4 = plt.subplot(425)
+ax5 = plt.subplot(426)
+ax6 = plt.subplot(427)
+ax7 = plt.subplot(428)
 
 plt.sca(ax1)
 x1, y1 = sample(1000)
 plt.plot(x1, y1)
 plt.title("original")
 
+freq2, amp2, x2, y2 = plotdata(80, 1000)
 plt.sca(ax2)
-y1fft = np.fft.fft(y1) / len(y1)
-x2, y2 = freqSpec(1000, y1fft)
-plt.plot(x2, y2, 'o')
-plt.title("frequence")
+plt.stem(freq2, amp2)
+plt.title("80Hz freq")
 
 plt.sca(ax3)
-x3, y3 = sample(120)
-plt.plot(x3, y3)
-plt.title("sf = 120Hz")
+plt.plot(x2, y2)
 
+freq3, amp3, x3, y3 = plotdata(100, 1000)
 plt.sca(ax4)
-y3fft = np.fft.fft(y3) / len(y3)
-x4, y4 = freqSpec(120, y3fft)
-plt.plot(x4, y4, 'o')
+plt.stem(freq3, amp3)
+plt.title("100Hz freq")
 
 plt.sca(ax5)
-y5 = np.fft.ifft(y3fft)
-plt.plot(x3, y5)
+plt.plot(x3, y3)
+
+freq4, amp4, x4, y4 = plotdata(1200, 1000)
+plt.sca(ax6)
+plt.stem(freq4, amp4)
+plt.title("120Hz freq")
+
+plt.sca(ax7)
+plt.plot(x4, y4)
 
 plt.show()
