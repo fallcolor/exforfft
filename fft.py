@@ -5,8 +5,11 @@ import math
 def sample(f):
     ''' return x and y between [-0.1s, 0.1s] according to sample frequency
     '''
-    x = np.linspace(-0.1, 0.1, f/5)
-    y = np.sin(2*np.pi*60*x) + np.cos(2*np.pi*25*x) + np.cos(2*np.pi*30*x)
+    if f == 0:
+        return 0, 0
+    x = np.arange(-0.1, 0.1, 1.0/f)
+    # y = np.sin(2*np.pi*60*x) + np.cos(2*np.pi*25*x) + np.cos(2*np.pi*30*x)
+    y = 2 + 3*np.cos(2*np.pi*50*x+np.pi/6) + 1.5*np.cos(2*np.pi*75*x+np.pi/2)
     return x, y
 
 def freqSpec(sf, arr):
@@ -21,9 +24,9 @@ def freqSpec(sf, arr):
         x[i] = i * sf / len(arr)
 
     y = np.abs(arr)[:l]
-    for i in range(len(y)):
-        if y[i] < 0.05:
-            y[i] = 0
+    # for i in range(len(y)):
+    #     if y[i] < 0.05:
+    #         y[i] = 0
 
     return x, y
 
@@ -41,8 +44,8 @@ def funci(freq, amp, ang, pointnum):
     for i in range(pointnum):
         y[i] = 0
         for j in range(len(freq)):
-            if amp[j] > 0:
-                y[i] += 2 * amp[j] * np.cos(2 * np.pi * freq[j] * x[i] + ang[j])
+            # if amp[j] > 0:
+            y[i] += 2 * amp[j] * np.cos(2 * np.pi * freq[j] * x[i] + ang[j])
     return x, y
 
 def plotdata(sp, disnum):
@@ -50,45 +53,42 @@ def plotdata(sp, disnum):
     yfft = np.fft.fft(y) / len(y)
     freq, amp, ang = freq2time(sp, yfft)
     xo, yo = funci(freq, amp, ang, disnum)
-    return freq, amp, xo, yo
+    return freq, amp, ang, xo, yo
 
 plt.figure(1)
-ax0 = plt.subplot(421)
-ax1 = plt.subplot(422)
-ax2 = plt.subplot(423)
-ax3 = plt.subplot(424)
-ax4 = plt.subplot(425)
-ax5 = plt.subplot(426)
-ax6 = plt.subplot(427)
-ax7 = plt.subplot(428)
+ax0 = plt.subplot(321)
+ax1 = plt.subplot(322)
+ax2 = plt.subplot(323)
+ax3 = plt.subplot(324)
+ax4 = plt.subplot(325)
+ax5 = plt.subplot(326)
 
 plt.sca(ax1)
 x1, y1 = sample(1000)
 plt.plot(x1, y1)
 plt.title("original")
 
-freq2, amp2, x2, y2 = plotdata(80, 1000)
+f2 = 80
+freq2, amp2, ang2, x2, y2 = plotdata(f2, 1000)
 plt.sca(ax2)
-plt.stem(freq2, amp2)
-plt.title("80Hz freq")
+plt.stem(freq2, amp2, label = "$amp$")
+plt.stem(freq2, ang2, label = "$ang$", markerfmt = 'x')
+plt.title(str(f2) + "Hz freq")
 
 plt.sca(ax3)
 plt.plot(x2, y2)
+plt.xlim(-0.1, 0.1)
 
-freq3, amp3, x3, y3 = plotdata(100, 1000)
+f3 = 200
+freq3, amp3, ang3, x3, y3 = plotdata(f3, 1000)
 plt.sca(ax4)
-plt.stem(freq3, amp3)
-plt.title("100Hz freq")
+plt.stem(freq3, amp3, label = "$amp$")
+plt.stem(freq3, ang3, label = "$ang$", markerfmt = 'x')
+plt.title(str(f3) + "Hz freq")
+plt.legend()
 
 plt.sca(ax5)
 plt.plot(x3, y3)
-
-freq4, amp4, x4, y4 = plotdata(1200, 1000)
-plt.sca(ax6)
-plt.stem(freq4, amp4)
-plt.title("120Hz freq")
-
-plt.sca(ax7)
-plt.plot(x4, y4)
+plt.xlim(-0.1, 0.1)
 
 plt.show()
