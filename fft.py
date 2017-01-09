@@ -74,47 +74,51 @@ def plotdata(sp, disnum):
         print ' '
     return freq, amp, ang, xo, yo
 
-plt.figure(1)
-ax0 = plt.subplot(321)
-ax1 = plt.subplot(322)
-ax2 = plt.subplot(323)
-ax3 = plt.subplot(324)
-ax4 = plt.subplot(325)
-ax5 = plt.subplot(326)
+def calc():
+    plt.figure(1)
+    ax0 = plt.subplot(321)
+    ax1 = plt.subplot(322)
+    ax2 = plt.subplot(323)
+    ax3 = plt.subplot(324)
+    ax4 = plt.subplot(325)
+    ax5 = plt.subplot(326)
 
-plt.sca(ax0)
-freq1 = [0, 50, 75]
-amp1 = [2, 3, 1.5]
-ang1 = [0, -np.pi/6, np.pi/2]
-plt.stem(freq1, amp1)
-plt.stem(freq1, ang1, markerfmt = 'x')
-plt.title("original")
+    plt.sca(ax0)
+    freq1 = [0, 50, 75]
+    amp1 = [2, 3, 1.5]
+    ang1 = [0, -np.pi/6, np.pi/2]
+    plt.stem(freq1, amp1)
+    plt.stem(freq1, ang1, markerfmt = 'x')
+    plt.title("original")
 
-plt.sca(ax1)
-x1, y1 = sample(1000)
-plt.plot(x1, y1)
+    plt.sca(ax1)
+    x1, y1 = sample(1000)
+    plt.plot(x1, y1)
 
-f2 = 80
-freq2, amp2, ang2, x2, y2 = plotdata(f2, 1000)
-plt.sca(ax2)
-plt.stem(freq2, amp2)
-plt.stem(freq2, ang2, markerfmt = 'x')
-plt.title(str(f2) + "Hz freq")
+    f2 = 80
+    freq2, amp2, ang2, x2, y2 = plotdata(f2, 1000)
+    plt.sca(ax2)
+    plt.stem(freq2, amp2)
+    plt.stem(freq2, ang2, markerfmt = 'x')
+    plt.title(str(f2) + "Hz freq")
 
-plt.sca(ax3)
-plt.plot(x2, y2)
-plt.xlim(rf, rb)
+    plt.sca(ax3)
+    plt.plot(x2, y2)
+    plt.xlim(rf, rb)
 
-f3 = 200
-freq3, amp3, ang3, x3, y3 = plotdata(f3, 1000)
-plt.sca(ax4)
-plt.stem(freq3, amp3)
-plt.stem(freq3, ang3, markerfmt = 'x')
-plt.title(str(f3) + "Hz freq")
-plt.legend()
+    f3 = 200
+    freq3, amp3, ang3, x3, y3 = plotdata(f3, 1000)
+    plt.sca(ax4)
+    plt.stem(freq3, amp3)
+    plt.stem(freq3, ang3, markerfmt = 'x')
+    plt.title(str(f3) + "Hz freq")
+    plt.legend()
 
-plt.sca(ax5)
-plt.plot(x3, y3)
-plt.xlim(rf, rb)
+    plt.sca(ax5)
+    plt.plot(x3, y3)
+    plt.xlim(rf, rb)
 
-plt.show()
+    plt.show()
+
+if __name__ == '__main__':
+    calc()
