@@ -35,8 +35,8 @@ for i in range(numframes):
     v = struct.unpack('h', left )[0]  
     y[i] = v
 
-for i in range(len(x)):
-    print x[i], y[i]
+# for i in range(len(x)):
+#     print x[i], y[i]
 
 ax1 = plt.subplot(211)
 ax2 = plt.subplot(212)
