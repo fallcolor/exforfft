@@ -12,20 +12,27 @@ def headConfig(nchannels=2, sampwidth=2, framerate=44100, nframes=0, comptype='N
     return (nchannels, sampwidth, framerate, nframes, comptype, name)
 
 def write():
-    time = 2
+    time = 1
     sp = 44100
     f = 440
-    a = 3000
+    a = 300
     ph = 0
     num = time * sp
-    x, y = genSignal(sp, f, a, ph, num)
+    mul = 10
+    # x, y = genSignal(sp, f, a, ph, num)
     # plt.plot(x, y)
     # plt.show()
+    y = np.zeros(num)
+    for i in range(mul):
+        xe, ye = genSignal(sp, f*(i+1), a, ph, num)
+        y += ye
+
     samples = []
     for i in range(num):
         samples.append(struct.pack('h', y[i]))
     sampleStr = ''.join(samples)
-    wavefile = wave.open('test.wav', 'w')
+    filename = 'wave_' + str(f) + 'base_' + str(mul) + 'multiple.wav'
+    wavefile = wave.open(filename, 'w')
     wavefile.setparams(headConfig(nframes = num*2, nchannels = 1))
     wavefile.writeframes(sampleStr)
     wavefile.close()

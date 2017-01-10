@@ -4,7 +4,7 @@ import numpy as np
 import fft
 import matplotlib.pyplot as plt 
 
-filename = 'test.wav'
+filename = 'wave_440base_10multiple.wav'
 # filename = 'voilin.wav'
 
 wavefile = wave.open(filename, 'r')
@@ -19,8 +19,9 @@ print 'sample width: ', sampltWidth
 print 'frame rate:   ', framerate
 print 'num frames:   ', numframes
 
-if numframes > 100:
-    numframes = 100
+maxpoint = 1000000
+if numframes > maxpoint:
+    numframes = maxpoint
 
 x = np.linspace(0, numframes*1.0/framerate, numframes)
 y = np.zeros(numframes)
