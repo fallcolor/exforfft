@@ -4,7 +4,7 @@ import numpy as np
 import fft
 import matplotlib.pyplot as plt 
 
-filename = 'wave_440base_10multiple.wav'
+filename = 'E:\pyproj\exforfft\Zero G Harmonica\Blues Chord Attack 1\Blues Chord Attk 1 G1.wav'
 # filename = 'voilin.wav'
 
 wavefile = wave.open(filename, 'r')
@@ -19,7 +19,7 @@ print 'sample width: ', sampltWidth
 print 'frame rate:   ', framerate
 print 'num frames:   ', numframes
 
-maxpoint = 1000000
+maxpoint = 80000
 if numframes > maxpoint:
     numframes = maxpoint
 
@@ -27,6 +27,10 @@ x = np.linspace(0, numframes*1.0/framerate, numframes)
 y = np.zeros(numframes)
 
 # print len(x), len(y)
+
+# delete front 3000 point
+delpoint = 3000
+wavefile.readframes(delpoint)
 
 # get amplitude
 for i in range(numframes):  
@@ -42,15 +46,15 @@ for i in range(numframes):
 ax1 = plt.subplot(211)
 ax2 = plt.subplot(212)
 
-plt.sca(ax1)
-plt.plot(x, y)
-plt.xlim(0, numframes*1.0/framerate)
+# plt.sca(ax1)
+# plt.plot(x, y)
+# plt.xlim(0, numframes*1.0/framerate)
 
 yfft = np.fft.fft(y)/len(y)
 freq, amp, ang = fft.freq2time(framerate, yfft)
 
 plt.sca(ax2)
-plt.stem(freq, amp)
-plt.stem(freq, ang, markerfmt = 'x')
+plt.stem(freq[:5000], amp[:5000])
+plt.stem(freq[:5000], ang[:5000], markerfmt = 'x')
 
 plt.show()
